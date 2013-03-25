@@ -1,12 +1,12 @@
 # CountMeIn
 
-CountMeIn is a fast counter implementation written in Clojure that can process million of items in a very short period of time and with low memory consumption. Once configured, it can count over lists of items very fast, grouping by specific attribut in the list and optionally applying "rules" to what can be counted in the form of filters. When available it takes advantage of multiple cores to make calculation in parallel making it even more faster.
+CountMeIn is a fast counter implementation written in Clojure that can process million of items in a very short period of time and with low memory consumption. Once configured, it can count over lists of items very fast, grouping them by specific attributes and optionally applying "rules" to what can be counted in the form of filters. When available it takes advantage of multiple cores to make calculation even faster.
 
 ## FAQ
 * For what can I use it?
 * CountMeIn is useful on all those scenarios where a large amount of data should be analyzed quickly, for example voting competitions where results are needed as fast as possible. In general CountMeIn can be used to analyzed data in close to real-time scenarios where the delay to setup and run paralelisation over multiple nodes is not feasible, either for accuracy or for latency problems.
 * What formats are supported?
-* At the moment it only supports csv or EDN type file
+* WIP: will supports csv or EDN type file
 * What filters are available?
 * CountMeIn can filter items that where seen more than a given threshold, or filter by the presence of a specific attribute you can configure
 
