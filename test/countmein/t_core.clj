@@ -2,19 +2,8 @@
   (:use midje.sweet)
   (:use [countmein.core])
   (:use [countmein.bloom])
+  (:require [clojure.core.reducers :as r])
   (:use [countmein.generation]))
-
-(facts "preparation of the input for later reduction"
-       (fact "a count of 1 is assigned to each candidate"
-             (let [counted (add-count '({:u "a" :candidate "A"} {:u "b" :candidate "B"}))]
-                   (filter #(nil? (:count %)) counted) => '()))
-       (fact "same candidate is counted as '1' twice"
-             (let [counted (add-count '({:candidate "A"} {:candidate "A"}))]
-                   (vals (first counted)) => '(1 "A")
-                   (vals (last counted)) => '(1 "A")))
-       (fact "should not remove other attributes"
-             (let [counted (add-count '({:u "a" :candidate "A"} {:u "a" :candidate "B"}))]
-                   (:u (first counted)) => "a")))
 
 (facts "counting candidates without filters"
        (fact "only one candidate"
@@ -63,4 +52,4 @@
 ;;       (let [filters [(confidence-filter 2 (empty-bloom 1000 10 0))]]
 ;;         (fact "it should remove all votes above threshold"
 ;;               (let [votes (make-votes 10 {"candidate-1" 100} {:invalid 0})]
-;;                 ((count-candidates votes filters) "candidate-1") => 2))))
+;;                 ((count-candidates votes filters) "candidate-1") => 2)))
