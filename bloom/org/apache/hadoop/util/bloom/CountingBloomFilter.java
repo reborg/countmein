@@ -68,7 +68,7 @@ import java.io.IOException;
  * 
  * @see <a href="http://portal.acm.org/citation.cfm?id=343571.343572">Summary cache: a scalable wide-area web cache sharing protocol</a>
  */
-public final class CountingBloomFilter extends Filter {
+public final class CountingBloomFilter extends Filter implements Cloneable {
   /** Storage for the counting buckets */
   private long[] buckets;
 
@@ -88,6 +88,17 @@ public final class CountingBloomFilter extends Filter {
   public CountingBloomFilter(int vectorSize, int nbHash, int hashType) {
     super(vectorSize, nbHash, hashType);
     buckets = new long[buckets2words(vectorSize)];
+  }
+
+  /**
+   * Creates a copy of this bloom filter with the same
+   * bitsize and hashconfiguration and current state.
+   * @return A clone of this CountingBloomFilter instance
+   */
+  public CountingBloomFilter clone() {
+    CountingBloomFilter clone = new CountingBloomFilter(vectorSize, nbHash, hashType);
+    clone.or(this);
+    return clone;
   }
 
   /** returns the number of 64 bit words it would take to hold vectorSize buckets */
