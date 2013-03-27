@@ -2,6 +2,6 @@
   :description "Fast counter in Clojure"
   :main countmein.parallel
   :jvm-opts ["-Xmx4g"]
-  :dependencies [[org.clojure/clojure "1.5.0"]
-                [org.apache.hadoop/hadoop-core "1.1.1"]]
+  :java-source-paths ["bloom"] ; Java source is stored separately.
+  :dependencies [[org.clojure/clojure "1.5.0"]]
   :profiles {:dev {:dependencies [[midje "1.5.0"]]}})
