@@ -181,6 +181,39 @@ public abstract class Filter {
     for(int i = 0; i < keys.length; i++) {
       add(keys[i]);
     }
-  }//end add()
-  
-}//end class
+  }
+
+
+  /**
+   * No need to take into account the hash instance, as it is
+   * equivalent to the integer hashType. Hash functions hold no state
+   * so no need to propagate equals/hashCode down to them.
+   */
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof Filter)) return false;
+
+    Filter filter = (Filter) o;
+
+    if (hashType != filter.hashType) return false;
+    if (nbHash != filter.nbHash) return false;
+    if (vectorSize != filter.vectorSize) return false;
+
+    return true;
+  }
+
+  /**
+   * No need to take into account the hash instance, as it is
+   * equivalent to the integer hashType. Hash functions hold no state
+   * so no need to propagate equals/hashCode down to them.
+   */
+  @Override
+  public int hashCode() {
+    int result = vectorSize;
+    result = 31 * result + hash.hashCode();
+    result = 31 * result + hashType;
+    return result;
+  }
+
+}

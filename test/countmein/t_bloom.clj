@@ -39,3 +39,12 @@
                    bloom (empty-bloom 1000 10 0)]
                (filter (confidence-filter 1 bloom) votes) => '({:user "user2"} {:user "user3"}))))
 
+(facts "equality of blooms"
+       (fact "empty blooms with same building params"
+             (let [firstbloom (empty-bloom)
+                   secondbloom (empty-bloom)]
+               (= firstbloom secondbloom) => truthy))
+       (fact "blooms with the same items in it"
+             (let [firstbloom (bloom-add "item" (empty-bloom))
+                   secondbloom (bloom-add "item" (empty-bloom))]
+               (= firstbloom secondbloom) => truthy)))

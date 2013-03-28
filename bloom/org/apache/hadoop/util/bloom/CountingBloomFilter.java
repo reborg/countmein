@@ -52,6 +52,7 @@ package org.apache.hadoop.util.bloom;
 import java.io.DataInput;
 import java.io.DataOutput;
 import java.io.IOException;
+import java.util.Arrays;
 
 /**
  * Implements a <i>counting Bloom filter</i>, as defined by Fan et al. in a ToN
@@ -105,7 +106,6 @@ public final class CountingBloomFilter extends Filter implements Cloneable {
   private static int buckets2words(int vectorSize) {
    return ((vectorSize - 1) >>> 4) + 1;
   }
-
 
   @Override
   public void add(Key key) {
@@ -293,4 +293,23 @@ public final class CountingBloomFilter extends Filter implements Cloneable {
     return res.toString();
   }
 
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    if (!super.equals(o)) return false;
+
+    CountingBloomFilter that = (CountingBloomFilter) o;
+
+    if (!Arrays.equals(buckets, that.buckets)) return false;
+
+    return true;
+  }
+
+  @Override
+  public int hashCode() {
+    int result = super.hashCode();
+    result = 31 * result + Arrays.hashCode(buckets);
+    return result;
+  }
 }

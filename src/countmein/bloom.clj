@@ -54,7 +54,7 @@
   "Generates a new bloom filter from a collection of maps. The value
   corresponding to the key k is added to the bloom for each map in coll"
   [k coll]
-  (build-bloom (remove nil? (map #(k %) coll))))
+  (build-bloom-from (remove nil? (map #(k %) coll))))
 
 (defn bloom-add
   "Add the given key to a clone of the given bloom and returns it."
