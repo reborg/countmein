@@ -4,9 +4,9 @@
 
 (facts "checking facts about the bloom"
        (fact "is empty"
-             (empty-bloom? (build-bloom [])) => truthy)
+             (empty-bloom? (build-bloom-from [])) => truthy)
        (fact "there something in there"
-             (empty-bloom? (build-bloom ["blah"])) => falsey))
+             (empty-bloom? (build-bloom-from ["blah"])) => falsey))
 
 (facts "create blooms from maps"
        (fact "empty bloom"
@@ -38,3 +38,4 @@
              (let [votes [{:user "user2"} {:user "user2"} {:user "user3"} {:user "user3"}]
                    bloom (empty-bloom 1000 10 0)]
                (filter (confidence-filter 1 bloom) votes) => '({:user "user2"} {:user "user3"}))))
+
