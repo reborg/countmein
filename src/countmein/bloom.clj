@@ -9,13 +9,18 @@
   [string]
   (Key. (. string getBytes)))
 
+(defn ===
+  "Compare two bloom filters considering them atom wrapped"
+  [bloom1 bloom2]
+  (= @bloom1 @bloom2))
+
 (defn empty-bloom?
   "True if the bloom was never added any element. Emptyness check is done
   by printing the bloom, creating a list of string numbers out of it,
   converting the strings to numbers, reducing on them. Only if the result
   is zero there was never any hash executed."
   [bloom]
-  (= 0 (reduce + (map #(Integer. %) (re-seq #"\d" (. bloom toString))))))
+  (= 0 (reduce + (map #(Integer. %) (re-seq #"\d" (. @bloom toString))))))
 
 (defn empty-bloom
   "Crates an empty bloom filter. If no arguments the Bloom filter is created
@@ -24,7 +29,7 @@
   ([]
     (apply empty-bloom (vals test-bloom-params)))
   ([size hash-n hash-t]
-    (CountingBloomFilter. size hash-n hash-t)))
+    (atom (CountingBloomFilter. size hash-n hash-t))))
 
 (defn build-bloom-from
   "Creates a counting bloom filter which is initialized with the given
@@ -36,19 +41,19 @@
   ([coll size hash-n hash-t] 
    (let [bloom (empty-bloom size hash-n hash-t)]
      (do
-       (doall (map #(. bloom add (Key. (. % getBytes))) coll))
+       (doall (map #(. @bloom add (Key. (. % getBytes))) coll))
        bloom))))
 
 (defn bloom-check
   "Check for the presence of the given item in the bloom filter"
   [item bloom]
-  (. bloom membershipTest (Key. (. item getBytes))))
+  (. @bloom membershipTest (Key. (. item getBytes))))
 
 (defn item-count
   "Check for the presence of the given item in the bloom filter"
   [item bloom]
   (let [item-key (Key. (. item getBytes))]
-    (. bloom approximateCount item-key)))
+    (. @bloom approximateCount item-key)))
 
 (defn bloom-in
   "Generates a new bloom filter from a collection of maps. The value
@@ -62,10 +67,10 @@
    (apply bloom-add item bloom (vals test-bloom-params)))
   ([item bloom size hash-n hash-t]
    (let [item-key (Key. (. item getBytes))
-         clone (CountingBloomFilter. size hash-n hash-t)]
+         clone (empty-bloom size hash-n hash-t)]
      (do 
-       (. clone or bloom) ;; current bloom state copied over the clone
-       (. clone add item-key) 
+       (. @clone or @bloom) ;; current bloom state copied over the clone
+       (. @clone add item-key) 
        clone))))
 
 (defn confidence-filter
@@ -73,6 +78,6 @@
   [threshold bloom]
     (fn [vote] 
       (let [item (:user vote)
-            side-effect (. bloom add (Key. (. item getBytes)))
+            side-effect (. @bloom add (Key. (. item getBytes)))
             c (item-count item bloom)]
         (<= c threshold))))

@@ -15,7 +15,7 @@
     (r/fold combine-fn reducef coll))
 
 (defn -main [& args]
-  (let [total 5000000
+  (let [total 50000
         distrib {"candidate-1" 40 "candidate-2" 30 "candidate-3" 10 "candidate-4" 10 "candidate-5" 10}
         options {:invalid 10 :honeypot 2}
         threshold 5

@@ -43,8 +43,8 @@
        (fact "empty blooms with same building params"
              (let [firstbloom (empty-bloom)
                    secondbloom (empty-bloom)]
-               (= firstbloom secondbloom) => truthy))
+               (=== firstbloom secondbloom) => truthy))
        (fact "blooms with the same items in it"
              (let [firstbloom (bloom-add "item" (empty-bloom))
                    secondbloom (bloom-add "item" (empty-bloom))]
-               (= firstbloom secondbloom) => truthy)))
+               (=== firstbloom secondbloom) => truthy)))
