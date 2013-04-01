@@ -97,9 +97,19 @@ public final class CountingBloomFilter extends Filter implements Cloneable {
    * @return A clone of this CountingBloomFilter instance
    */
   public CountingBloomFilter clone() {
-    CountingBloomFilter clone = new CountingBloomFilter(vectorSize, nbHash, hashType);
+    CountingBloomFilter clone = copy();
     clone.or(this);
     return clone;
+  }
+
+  /**
+   * Create a new instance of bloom filter with the same settings as this.
+   * Doesn't copy over the bitmap content. Use clone for a deep clone instead.
+   * @return A copy of this CountingBloomFilter instance
+   */
+  public CountingBloomFilter copy() {
+    CountingBloomFilter copy = new CountingBloomFilter(vectorSize, nbHash, hashType);
+    return copy;
   }
 
   /** returns the number of 64 bit words it would take to hold vectorSize buckets */

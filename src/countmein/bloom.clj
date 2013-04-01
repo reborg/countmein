@@ -66,16 +66,14 @@
   "Add the item to a clone of the given bloom and returns it. It
   assumes the given bloom is wrapped as an atom and only return the new
   bloom if during the compare and swap the original bloom never changed."
-  ([item bloom]
-   (apply bloom-add item bloom (vals test-bloom-params)))
-  ([item bloom size hash-n hash-t]
-   (let [clone (empty-bloom size hash-n hash-t)]
-     (swap! bloom (fn [bloom clone item] 
-                    (do 
-                      (. @clone or bloom)
-                      (. @clone add (bloom-key item))) 
-                    bloom) clone item) 
-     clone)))
+  [item bloom]
+  (let [copy (. @bloom copy)]
+    (swap! bloom (fn [bloom copy item] 
+                   (do 
+                     (. copy or bloom)
+                     (. copy add (bloom-key item))) 
+                   bloom) copy item) 
+    (atom copy)))
 
 (defn confidence-filter
   "Creates a predicate that can be uses to filter collections of votes."
