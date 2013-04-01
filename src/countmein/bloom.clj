@@ -4,7 +4,7 @@
 (defrecord bloom-params [size hash-n hash-t])
 (def test-bloom-params (bloom-params. 1000 10 1))
 
-(defn item
+(defn bloom-key
   "Transforms a string element for the bloom into a Key object."
   [string]
   (Key. (. string getBytes)))
@@ -41,18 +41,18 @@
   ([coll size hash-n hash-t] 
    (let [bloom (empty-bloom size hash-n hash-t)]
      (do
-       (doall (map #(. @bloom add (Key. (. % getBytes))) coll))
+       (doall (map #(. @bloom add (bloom-key %)) coll))
        bloom))))
 
 (defn bloom-check
   "Check for the presence of the given item in the bloom filter"
   [item bloom]
-  (. @bloom membershipTest (Key. (. item getBytes))))
+  (. @bloom membershipTest (bloom-key item)))
 
 (defn item-count
   "Check for the presence of the given item in the bloom filter"
   [item bloom]
-  (let [item-key (Key. (. item getBytes))]
+  (let [item-key (bloom-key item)]
     (. @bloom approximateCount item-key)))
 
 (defn bloom-in
@@ -66,7 +66,7 @@
   ([item bloom]
    (apply bloom-add item bloom (vals test-bloom-params)))
   ([item bloom size hash-n hash-t]
-   (let [item-key (Key. (. item getBytes))
+   (let [item-key (bloom-key item)
          clone (empty-bloom size hash-n hash-t)]
      (do 
        (. @clone or @bloom) ;; current bloom state copied over the clone
@@ -78,6 +78,6 @@
   [threshold bloom]
     (fn [vote] 
       (let [item (:user vote)
-            side-effect (. @bloom add (Key. (. item getBytes)))
+            side-effect (. @bloom add (bloom-key item))
             c (item-count item bloom)]
         (<= c threshold))))
